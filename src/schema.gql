@@ -1,0 +1,24 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Todo {
+  id: Int!
+  description: String!
+  done: Boolean!
+}
+
+type Query {
+  """hola mundo es lo que retorna"""
+  helloResolver: String!
+  RandomNumber: Float!
+
+  """numero random dentro de un rango definido"""
+  randomFromZeroTo(to: Int): Int!
+  todos: [Todo!]!
+  todo(id: Int!): Todo!
+}
+
+type Mutation {
+  createTodo: Todo!
+}
