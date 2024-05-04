@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Todo } from './entity/todo.entity';
 import { UpdateTodoInput, CreateTodoInput } from './dto/inputs';
+import { StatusArgs } from './dto/args/status.args';
 
 @Injectable()
 export class TodoService {
@@ -12,10 +13,26 @@ export class TodoService {
     { id: 1, description: 'Piedra del alma', done: false },
     { id: 2, description: 'Piedra del espacio', done: false },
     { id: 3, description: 'Piedra del poder', done: false },
+    { id: 4, description: 'Piedra del tiempo', done: true },
   ];
 
-  findAll(): Todo[] {
-    return this.todos;
+  get totalTodos() {
+    return this.todos.length;
+  }
+
+  get pendingTodos() {
+    return this.todos.filter((item) => item.done === false).length;
+  }
+  get completedTodos() {
+    return this.todos.filter((item) => item.done === true).length;
+  }
+
+  findAll(statusArgs?: StatusArgs): Todo[] {
+    const { status } = statusArgs;
+    if (status === undefined || status === null) return this.todos;
+
+    const todosToReturn = this.todos.filter((item) => item.done === status);
+    return todosToReturn;
   }
 
   findOne(id: number): Todo {
@@ -39,8 +56,13 @@ export class TodoService {
 
     const todoToUpdate = this.findOne(id);
     if (description) todoToUpdate.description = description;
-    if (done) todoToUpdate.done = done;
-
+    if (done !== undefined) todoToUpdate.done = done;
+    console.log('this todos', this.todos);
     return todoToUpdate;
+  }
+
+  deleteTodo(id: number): boolean {
+    this.todos = this.todos.filter((item) => item.id !== id);
+    return true;
   }
 }

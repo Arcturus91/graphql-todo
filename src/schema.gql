@@ -15,10 +15,29 @@ type Query {
 
   """numero random dentro de un rango definido"""
   randomFromZeroTo(to: Int): Int!
-  todos: [Todo!]!
+  todos(status: Boolean): [Todo!]!
   todo(id: Int!): Todo!
+  totalTodos: Int!
+  completedTodos: Int!
+  pendingTodos: Int!
 }
 
 type Mutation {
-  createTodo: Todo!
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
+  updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
+  removeTodo(id: Int!): Boolean!
+}
+
+input CreateTodoInput {
+  """what needs to be done"""
+  description: String!
+}
+
+input UpdateTodoInput {
+  """what needs to be done"""
+  description: String
+
+  """if completed or not"""
+  done: Boolean
+  id: Int!
 }
